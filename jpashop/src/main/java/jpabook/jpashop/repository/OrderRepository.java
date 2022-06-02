@@ -113,4 +113,13 @@ public class OrderRepository {
     }
 
 
+    public List<Order> findAllWithItem() {
+        // distinct 추가 : 중복제거 but ㅇ
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }
