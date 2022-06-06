@@ -113,6 +113,8 @@ public class OrderRepository {
     }
 
 
+
+
     public List<Order> findAllWithItem() {
         // distinct 추가 : 중복제거 but ㅇ
         return em.createQuery(
@@ -120,6 +122,17 @@ public class OrderRepository {
                         " join fetch o.member m" +
                         " join fetch o.delivery d" +
                         " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        // toOne 관계는 fetch join
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 }
