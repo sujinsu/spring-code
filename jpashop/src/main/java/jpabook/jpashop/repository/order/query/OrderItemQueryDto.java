@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class OrderItemQueryDto {
 
-    @JsonIgnore
+//    @JsonIgnore
     private Long orderId;
     private String itemName;
     private int orderPrice;
