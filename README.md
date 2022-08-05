@@ -8,3 +8,6 @@
 
 
 - springmvc : mvc 1
+- mvc2 : mvc2
+- data-jpa : data-jpa
+- item-service : jpa
