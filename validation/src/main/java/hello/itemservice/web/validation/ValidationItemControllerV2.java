@@ -74,9 +74,8 @@ public class ValidationItemControllerV2 {
         }
 
         // 검증에 실패하면 다시 입력 폼으로
-        if (!errors.isEmpty()){
-            log.info("errors = {}", errors);
-            model.addAttribute("errors", errors);
+        if (bindingResult.hasErrors()){
+            log.info("errors = {}", bindingResult);
             return "validation/v2/addForm";
         }
 
