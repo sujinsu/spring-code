@@ -5,6 +5,7 @@ import hello.login.web.filter.LogFilter;
 import hello.login.web.filter.LoginCheckFilter;
 import hello.login.web.interceptor.LogInterceptor;
 import hello.login.web.interceptor.LoginCheckInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class WebConfig implements WebMvcConfigurer {
 
+    @Autowired LoginCheckFilter loginCheckFilter;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 
@@ -52,7 +54,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean loginCheckFilter(){
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new LoginCheckFilter());
+        filterRegistrationBean.setFilter(loginCheckFilter);
         filterRegistrationBean.setOrder(2);
         filterRegistrationBean.addUrlPatterns("/*"); // 모든 URI 에 적용
 
