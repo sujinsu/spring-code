@@ -20,7 +20,7 @@ public class HelloController{
     }
 
     // Spring 이 제공하는 RequestParam 을 사용하여 중간에서 타입 변환
-    @GetMapping("/hello-v2")
+    @GetMapping("/hello-v2") // "10,000"
     public String helloV2(@RequestParam Integer data){
         System.out.println("data = " + data);
         return "ok";
