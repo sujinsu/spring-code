@@ -24,6 +24,8 @@ public class ServletUploadControllerV1 {
 
     @PostMapping("/upload")
     public String saveFileV1(HttpServletRequest request) throws ServletException, IOException {
+
+        // MultipartHttpServletRequest 는 잘 쓰지 않음 Multipartfile 을 사용
         log.info("request={}", request);
 
         String itemName = request.getParameter("itemName");
