@@ -9,7 +9,7 @@ public class UploadFile {
     private String storeFileName;
 
     public UploadFile(String originalFilename, String storeFileName) {
-        this.uploadFileName = uploadFileName;
+        this.uploadFileName = originalFilename;
         this.storeFileName = storeFileName;
     }
 }

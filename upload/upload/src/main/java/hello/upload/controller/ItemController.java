@@ -6,16 +6,23 @@ import hello.upload.domain.UploadFile;
 import hello.upload.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -56,5 +63,31 @@ public class ItemController {
         Item item = itemRepository.findById(id);
         model.addAttribute("item", item);
         return "item-view";
+    }
+
+    // 보안에 취약
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        // "file:/Users/../79g6f87g6s9gfs87g9s-6sg87fg6-gs6d0-sgsgsdg.png"
+        return new UrlResource("file:"+ fileStore.getFullPath(filename));
+    }
+
+    @GetMapping("/attach/{itemId}")
+    public ResponseEntity<Resource> downloadAttach(@PathVariable Long itemId) throws MalformedURLException {
+        // 권한있는 사람들만 item id에 접근 가능 -> 다운 가능
+        Item item = itemRepository.findById(itemId);
+        String storeFileName = item.getAttachFile().getStoreFileName();
+        String uploadFileName = item.getAttachFile().getUploadFileName(); // 사용자가 올릴 때 썼던 파일명
+
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+
+        log.info("uploadFileName={}", uploadFileName);
+
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 }
