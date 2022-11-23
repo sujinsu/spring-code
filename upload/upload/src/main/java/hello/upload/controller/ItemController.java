@@ -7,8 +7,10 @@ import hello.upload.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -47,5 +49,12 @@ public class ItemController {
         redirectAttributes.addAttribute("itemId", item.getId());
 
         return "redirect:/items/{itemId}";
+    }
+
+    @GetMapping("/item/{id}")
+    public String items(@PathVariable Long id, Model model){
+        Item item = itemRepository.findById(id);
+        model.addAttribute("item", item);
+        return "item-view";
     }
 }
