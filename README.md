@@ -17,3 +17,6 @@
 - exception : mvc2
 - typeconverter : mvc2
 - upload : mvc2
+
+
+- : jpa 실습
